@@ -40,25 +40,18 @@ def basketball_mover():
     robot.straight(350)
     robot.straight(-350)
 
-hot_cross_buns()
+def step_counter():
+    robot.straight(650)
+    robot.stop()
+    robot.settings(straight_speed=20, straight_acceleration=791, turn_rate=30, turn_acceleration=735)
+    robot.straight(265)
+    robot.stop()
+    robot.settings(straight_speed=900, straight_acceleration=791, turn_rate=30, turn_acceleration=735)
+    robot.straight(-1066)
 
 
 robot = robot_setup()
 
-basketball_mover()
+# basketball_mover()
 
-
-# robot.straight(-1000)
-# ev3.speaker.beep()
-
-# # Turn clockwise by 360 degrees and back again.
-# robot.turn(360)
-# ev3.speaker.beep()
-
-# robot.turn(-360)
-# ev3.speaker.beep()
-
-# for i in range(4):
-#     ev3.speaker.beep()
-#     print("beeped")
-#     # time.sleep(4)
+step_counter()
