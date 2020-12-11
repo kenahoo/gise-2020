@@ -18,23 +18,22 @@ from pybricks.robotics import DriveBase
 
 import time
 
-# Initialize the EV3 Brick.
-ev3 = EV3Brick()
 
-# Initialize the motors.
-left_motor = Motor(Port.A)
-right_motor = Motor(Port.B)
+def robot_setup():
+    # Initialize the EV3 Brick.
+    ev3 = EV3Brick()
 
-# Initialize the drive base.
-robot = DriveBase(left_motor, right_motor, wheel_diameter=85.0, axle_track=123.3)
+    # Initialize the motors.
+    left_motor = Motor(Port.A)
+    right_motor = Motor(Port.B)
 
-# Go forward and backwards for one meter.
+    # Initialize the drive base.
+    robot = DriveBase(left_motor, right_motor, wheel_diameter=85.0, axle_track=123.3)
 
-def show_settings():
-    (speed, accel, turn_rate, turn_accel) = robot.settings()
-    print("speed=" + str(speed) + ", accel=" + str(accel) + ", turn_rate=" + str(turn_rate) + ", TA=" + str(turn_accel))
+    # Go forward and backwards
+    robot.settings(straight_speed=2000, straight_acceleration=791, turn_rate=30, turn_acceleration=735)
 
-show_settings()
+    return robot
 
 robot.settings(straight_speed=2000, straight_acceleration=791, turn_rate=30, turn_acceleration=735)
 robot.straight(500)
