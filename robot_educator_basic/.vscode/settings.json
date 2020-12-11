@@ -2,7 +2,8 @@
 {
 	"files.eol": "\n",
 	"debug.openDebug": "neverOpen",
-	"python.linting.enabled": false,
+	"python.linting.enabled": true,
 	"python.languageServer": "None",
-	"python.pythonPath": "/usr/local/bin/python3"
+	"python.pythonPath": "/usr/local/bin/python3",
+	"python.linting.pylintEnabled": true
 }
