@@ -35,24 +35,17 @@ def robot_setup():
 
     return robot
 
-robot.settings(straight_speed=2000, straight_acceleration=791, turn_rate=30, turn_acceleration=735)
-robot.straight(500)
-# ev3.speaker.beep()
 
-def hot_cross_buns():
-    # Plays Hot Cross Buns, once
-    ev3.speaker.play_notes(("E3/4", "D3/4", "C3/2", "E3/4", "D3/4", "C3/2",
-                            "C3/8", "C3/8", "C3/8", "C3/8",
-                            "D3/8", "D3/8", "D3/8", "D3/8",
-                            "E3/4", "D3/4", "C3/2"))
+def basketball_mover():
+    robot.straight(350)
+    robot.straight(-350)
 
 hot_cross_buns()
 
-show_settings()
 
-# robot.settings(turn_rate=30)
-robot.turn(-90)
+robot = robot_setup()
 
+basketball_mover()
 
 
 # robot.straight(-1000)
