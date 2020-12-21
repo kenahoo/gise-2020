@@ -78,10 +78,28 @@ def turn(angle, speed=500, sharpness=30):
     robot.settings(straight_speed=speed, straight_acceleration=791, turn_rate=sharpness, turn_acceleration=735)
     robot.turn(angle)
 
+def go(distance, speed=200, turn_angle=0):
+    """
+    turn angle:
+      * 0 for straight;              (left, right) = (  speed,   speed)
+      * 50 for one-wheel turn right; (left, right) = (2*speed,       0)
+      * 100 for turn in place right; (left, right) = (  speed,  -speed)
+      * -50 for one-wheel turn left; (left, right) = (      0, 2*speed)
+      * -100 for turn in place left; (left, right) = ( -speed,   speed)
+    """
+    # First: get ratio of left & right speeds
+    # Then: multiply by 'speed' number
+    left_motor = speed/100 * turn_angle + 0.5*speed
+    right_motor = -speed/100 * turn_angle + 0.5*speed
+
+    # TODO PROBLEM: the two motors turn for different lengths of time.  Need to be same amount of time.
+    robot.left.run_angle(speed = left_motor, rotation_angle=distance, then=Stop.HOLD, wait=False)
+    robot.right.run_angle(speed = right_motor, rotation_angle=distance, then=Stop.HOLD, wait=True)
+
 robot = robot_setup()
 
-robot.left.run_angle(speed=100, rotation_angle=100, then=Stop.HOLD, wait=False)
-robot.right.run_angle(speed=-100, rotation_angle=100, then=Stop.HOLD, wait=True)
+# This here is going to be go-under-pullup-bar-to-dance-area
+go(distance=360, speed=400, turn_angle=100)
 
 # if pressing up button:
 
@@ -91,3 +109,7 @@ robot.right.run_angle(speed=-100, rotation_angle=100, then=Stop.HOLD, wait=True)
 # step_counter()
 
 # dance_mission()
+
+
+# How to write a plus-minus sign; where the plus is RIGHT ABOVE THE MINUS OMG!!!!
+# <Option><Shift><Plus>
