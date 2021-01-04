@@ -78,9 +78,11 @@ def turn(angle, speed=500, sharpness=30):
     robot.settings(straight_speed=speed, straight_acceleration=791, turn_rate=sharpness, turn_acceleration=735)
     robot.turn(angle)
 
-def go(distance, speed=200, turn_angle=0):
+def go(distance, speed=400, turn_angle=0):
     """
-    turn angle:
+    :param distance: how far to go, in millimeters
+    :param speed: how fast to go, in unknown units, in the range -1800 to +1800
+    :param turn_angle:
       * 0 for straight;              (left, right) = (  speed,   speed)
       * 50 for one-wheel turn right; (left, right) = (2*speed,       0)
       * 100 for turn in place right; (left, right) = (  speed,  -speed)
@@ -89,27 +91,38 @@ def go(distance, speed=200, turn_angle=0):
     """
     # First: get ratio of left & right speeds
     # Then: multiply by 'speed' number
-    left_motor = speed/100 * turn_angle + 0.5*speed
-    right_motor = -speed/100 * turn_angle + 0.5*speed
+    left_motor_speed = speed/100 * turn_angle + 0.5*speed   # 100/100 * -100 + 0.5 * 100 = 1 * -100 + 50 = -50
+    right_motor_speed = -speed/100 * turn_angle + 0.5*speed
 
-    # TODO PROBLEM: the two motors turn for different lengths of time.  Need to be same amount of time.
-    robot.left.run_angle(speed = left_motor, rotation_angle=distance, then=Stop.HOLD, wait=False)
-    robot.right.run_angle(speed = right_motor, rotation_angle=distance, then=Stop.HOLD, wait=True)
+    # when we asked for 20cm, it went 14cm.  So multiply by 10/7.
+    distance_factor = 10/7
+
+    avg_speed = (left_motor_speed + right_motor_speed) / 2
+    print("left: " + str(left_motor_speed) + "; right: " + str(right_motor_speed))
+    robot.left.run_angle(speed = left_motor_speed, rotation_angle=distance*left_motor_speed/avg_speed*distance_factor, then=Stop.HOLD, wait=False)
+    robot.right.run_angle(speed = right_motor_speed, rotation_angle=distance*right_motor_speed/avg_speed*distance_factor, then=Stop.HOLD, wait=True)
 
 robot = robot_setup()
 
-# This here is going to be go-under-pullup-bar-to-dance-area
-go(distance=360, speed=400, turn_angle=100)
+# This is testing driving straight:
+# go(400, speed=800)
 
-# if pressing up button:
+# This here is going to be go-under-pullup-bar-to-dance-area
+def step_counter_pull_up_bar_dance_battle():
+    go_straight(650)
+    go_straight(265, speed=20)
+    robot.stop()
+    go(distance=-350, speed=450, turn_angle=-5)
+    go(360.69, 440, -19)
+    go(distance=400, speed=450)
+    go(330, 450, 0)
+    go(3000, 100, -100)
+
 
 # basketball_mover()
 
 # if pressing down button:
-# step_counter()
+step_counter_pull_up_bar_dance_battle()
 
 # dance_mission()
 
-
-# How to write a plus-minus sign; where the plus is RIGHT ABOVE THE MINUS OMG!!!!
-# <Option><Shift><Plus>
