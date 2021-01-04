@@ -21,6 +21,14 @@ from pybricks.robotics import DriveBase
 import time
 
 
+#!/usr/bin/env python3
+
+from ev3dev.ev3 import *
+from time import sleep
+
+btn = Button()
+
+
 def robot_setup():
     # Initialize the EV3 Brick.
     ev3 = EV3Brick()
@@ -106,17 +114,22 @@ robot = robot_setup()
 
 # This is testing driving straight:
 # go(400, speed=800)
+def dance():
+    go(20)
+    go(-20)
+    dance()
 
 # This here is going to be go-under-pullup-bar-to-dance-area
 def step_counter_pull_up_bar_dance_battle():
-    go_straight(650)
-    go_straight(265, speed=20)
+    go_straight(650)  # Forward
+    go_straight(265, speed=20)  # Forward slowly
     robot.stop()
-    go(distance=-350, speed=450, turn_angle=-5)
-    go(360.69, 440, -19)
-    go(distance=400, speed=450)
-    go(330, 450, 0)
-    go(3000, 100, -100)
+    go(distance=-350, speed=450, turn_angle=-5) # Backwards & to the left
+    go(360.69, 440, -19) # Forwards and more sharply to the left
+    go(distance=400, speed=450)  # Straight
+    go(distance=50, turn_angle=-60)  # Turn left
+    go(330, 450, 0)  # Go to dance area
+    dance()
 
 
 # basketball_mover()
@@ -125,4 +138,45 @@ def step_counter_pull_up_bar_dance_battle():
 step_counter_pull_up_bar_dance_battle()
 
 # dance_mission()
+
+def left(state):
+    """
+     "state" tells us whether the button was pressed, or was released
+    """
+    if state:
+        basketball_mover()
+    
+def right(state):
+    if state:
+        step_counter_pull_up_bar_dance_battle()
+    
+# def up(state):
+#     print('Up button pressed' if state else 'Up button released')
+    
+# def down(state):
+#     print('Down button pressed' if state else 'Down button released')
+    
+# def enter(state):
+#     print('Enter button pressed' if state else 'Enter button released')
+    
+# def backspace(state):
+#     print('Backspace button pressed' if state else 'Backspace button released')
+    
+# If running this script via SSH, press Ctrl+C to quit
+# if running this script from Brickman, long-press backspace button to quit
+
+
+btn.on_left = left
+btn.on_right = right
+# btn.on_up = up
+# btn.on_down = down
+# btn.on_enter = enter
+# btn.on_backspace = backspace
+
+while True:  # This loop checks buttons state continuously, 
+             # calls appropriate event handlers
+    btn.process() # Check for currently pressed buttons. 
+    # If the new state differs from the old state, 
+    # call the appropriate button event handlers.
+    sleep(0.01)  # buttons state will be checked every 0.01 second
 
