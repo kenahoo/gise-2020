@@ -11,28 +11,23 @@ Building instructions can be found at:
 https://education.lego.com/en-us/support/mindstorms-ev3/building-instructions#robot
 
 PyBricks docs:  https://pybricks.github.io/ev3-micropython/
+
+We are using some button techniques from https://pybricks.github.io/ev3-micropython/examples/elephant.html .
 """
 
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import Motor
-from pybricks.parameters import Port, Stop
+from pybricks.parameters import Port, Stop, Button
 from pybricks.robotics import DriveBase
+
+# from pybricks.parameters import Port, Direction, Color
+from pybricks.tools import wait, StopWatch
+
 
 import time
 
 
-#!/usr/bin/env python3
-
-from ev3dev.ev3 import *
-from time import sleep
-
-btn = Button()
-
-
 def robot_setup():
-    # Initialize the EV3 Brick.
-    ev3 = EV3Brick()
-
     # Initialize the motors.
     left_motor = Motor(Port.A)
     right_motor = Motor(Port.B)
@@ -131,52 +126,38 @@ def step_counter_pull_up_bar_dance_battle():
     go(330, 450, 0)  # Go to dance area
     dance()
 
+def line_follower(distance,speed,turn_angle):
+    pass
 
-# basketball_mover()
+def button_loop():
+    # Initialize the EV3 Brick.
+    ev3 = EV3Brick()
 
-# if pressing down button:
-step_counter_pull_up_bar_dance_battle()
+    while True:
+        # Wait until any Brick Button is pressed.
+        while not any(ev3.buttons.pressed()):
+            wait(10)
 
-# dance_mission()
+        # Respond to the Brick Button press.
 
-def left(state):
-    """
-     "state" tells us whether the button was pressed, or was released
-    """
-    if state:
-        basketball_mover()
-    
-def right(state):
-    if state:
-        step_counter_pull_up_bar_dance_battle()
-    
-# def up(state):
-#     print('Up button pressed' if state else 'Up button released')
-    
-# def down(state):
-#     print('Down button pressed' if state else 'Down button released')
-    
-# def enter(state):
-#     print('Enter button pressed' if state else 'Enter button released')
-    
-# def backspace(state):
-#     print('Backspace button pressed' if state else 'Backspace button released')
-    
-# If running this script via SSH, press Ctrl+C to quit
-# if running this script from Brickman, long-press backspace button to quit
+        # Check whether Up Button is pressed
+        if Button.UP in ev3.buttons.pressed():
+            ev3.speaker.beep(600)
+            step_counter_pull_up_bar_dance_battle()
 
+            # To avoid registering the same command again, wait until
+            # the Up Button is released before continuing.
+            while Button.UP in ev3.buttons.pressed():
+                wait(10)
 
-btn.on_left = left
-btn.on_right = right
-# btn.on_up = up
-# btn.on_down = down
-# btn.on_enter = enter
-# btn.on_backspace = backspace
+        # Check whether Down Button is pressed
+        if Button.DOWN in ev3.buttons.pressed():
+            ev3.speaker.beep(600)
+            basketball_mover()
 
-while True:  # This loop checks buttons state continuously, 
-             # calls appropriate event handlers
-    btn.process() # Check for currently pressed buttons. 
-    # If the new state differs from the old state, 
-    # call the appropriate button event handlers.
-    sleep(0.01)  # buttons state will be checked every 0.01 second
+            # To avoid registering the same command again, wait until
+            # the Down Button is released before continuing.
+            while Button.DOWN in ev3.buttons.pressed():
+                wait(10)
 
+button_loop()
