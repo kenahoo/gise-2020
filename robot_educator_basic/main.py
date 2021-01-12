@@ -16,13 +16,12 @@ We are using some button techniques from https://pybricks.github.io/ev3-micropyt
 """
 
 from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import Motor
+from pybricks.ev3devices import Motor, ColorSensor
 from pybricks.parameters import Port, Stop, Button
 from pybricks.robotics import DriveBase
 
 # from pybricks.parameters import Port, Direction, Color
 from pybricks.tools import wait, StopWatch
-
 
 import time
 
@@ -126,9 +125,6 @@ def step_counter_pull_up_bar_dance_battle():
     go(330, 450, 0)  # Go to dance area
     dance()
 
-def line_follower(distance,speed,turn_angle):
-    pass
-
 def button_loop():
     # Initialize the EV3 Brick.
     ev3 = EV3Brick()
@@ -160,4 +156,47 @@ def button_loop():
             while Button.DOWN in ev3.buttons.pressed():
                 wait(10)
 
-button_loop()
+# button_loop()
+
+
+def line_follower(distance, speed, gain=1.2, right_side=True):
+    """
+    Based on https://pybricks.github.io/ev3-micropython/examples/robot_educator_line.html
+
+    :param gain: the gain of the proportional line controller. This means that for every
+    percentage point of light deviating from the threshold, we set the turn
+    rate of the drivebase to 1.2 degrees per second.
+    """
+
+
+    # Calculate the light threshold. Choose values based on your measurements.
+    BLACK = 9
+    WHITE = 85
+    threshold = (BLACK + WHITE) / 2
+
+    # Initialize the color sensor.
+    line_sensor = ColorSensor(Port.S2)
+
+    flip = -1 if right_side else 1
+
+    gone_distance = 0
+
+    # this loop goes until we've gone enough distance, then the condition will be false
+    while gone_distance <= distance:
+        # Calculate the deviation from the threshold.
+        deviation = line_sensor.reflection() - threshold
+
+        # Calculate the turn rate.
+        turn_rate = gain * deviation
+
+        # Set the drive base speed and turn rate.
+        robot.drive(speed, flip * turn_rate)
+
+        # TODO: figure out how far we just went
+
+        # You can wait for a short time or do other things in this loop.
+        wait(10)
+
+
+
+line_follower(1000, speed=100, gain=0.5)
