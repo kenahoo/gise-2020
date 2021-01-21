@@ -156,7 +156,7 @@ def button_loop():
             while Button.DOWN in ev3.buttons.pressed():
                 wait(10)
 
-# button_loop()
+button_loop()
 
 
 def line_follower(distance, speed, gain=1.2, right_side=True):
@@ -199,4 +199,4 @@ def line_follower(distance, speed, gain=1.2, right_side=True):
 
 
 
-line_follower(1000, speed=100, gain=0.5)
+# line_follower(1000, speed=100, gain=0.5)
