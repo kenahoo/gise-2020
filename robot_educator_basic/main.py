@@ -169,7 +169,13 @@ def button_loop():
             while Button.DOWN in ev3.buttons.pressed():
                 wait(10)
 
-# button_loop()
+        if Button.LEFT in ev3.buttons.pressed():
+            ev3.speaker.beep(600)
+            treadmill()
+
+            while Button.LEFT in ev3.buttons.pressed():
+                wait(10)
+
 
 
 def line_follower(distance, speed, gain=1.2, right_side=True, delay=10):
