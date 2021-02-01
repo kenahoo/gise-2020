@@ -129,13 +129,16 @@ def step_counter_pull_up_bar_dance_battle():
 
 def treadmill():
     # 1. Go forward a tiny bit
-    go_straight(distance=70, speed=450)
+    go_straight(distance=150, speed=450)
 
     # 2. Line follow until you get to the treadmill
-    line_follower(distance=1365, speed=100, gain=0.5, delay=1)
+    line_follower(distance=1410, speed=100, gain=0.5, delay=1)
 
-    # 3. Get up onto the treadmill
-    # 4. Spin right wheel so we can spin the treadmill
+    robot.stop()
+
+
+    # TODO 3. Get up onto the treadmill
+    # TODO 4. Spin right wheel so we can spin the treadmill
 
 
 def button_loop():
@@ -220,7 +223,9 @@ def line_follower(distance, speed, gain=1.2, right_side=True, delay=10):
 
         # TODO: figure out how far we just went
         gone_distance = robot.distance()
+        print(gone_distance)
+
+#button_loop()
 
 
-
-treadmill()
+Motor(Port.C).run_time(speed=-1000, time=10000)
