@@ -132,10 +132,17 @@ def treadmill():
     go_straight(distance=150, speed=450)
 
     # 2. Line follow until you get to the treadmill
-    line_follower(distance=1410, speed=100, gain=0.5, delay=1)
+    line_follower(distance=1300, speed=100, gain=0.5, delay=1)
+
+    Motor(Port.C).run(speed=350)
+
+    go_straight(distance=180, speed=150)
 
     robot.stop()
 
+    Motor(Port.C).run_time(speed=1000, time=10000)
+
+    go_straight(distance=-3000, speed=500)
 
     # TODO 3. Get up onto the treadmill
     # TODO 4. Spin right wheel so we can spin the treadmill
@@ -165,7 +172,7 @@ def button_loop():
         # Check whether Down Button is pressed
         if Button.DOWN in ev3.buttons.pressed():
             ev3.speaker.beep(600)
-            basketball_mover()
+            knock_bench()
 
             # To avoid registering the same command again, wait until
             # the Down Button is released before continuing.
@@ -225,7 +232,25 @@ def line_follower(distance, speed, gain=1.2, right_side=True, delay=10):
         gone_distance = robot.distance()
         print(gone_distance)
 
-#button_loop()
 
+#Motor(Port.C).run_time(speed=1000, time=10000)
 
-Motor(Port.C).run_time(speed=-1000, time=10000)
+def end_of_treadmill():
+
+    go(210, 800)
+
+    Motor(Port.C).run_time(speed=1000, time=10000)
+
+#end_of_treadmill()
+
+def knock_bench():
+
+    go(distance=300, speed= 450)
+
+    go(distance=25, speed=250, turn_angle=-100)
+
+    go(distance=-400, speed=450, turn_angle= -10)
+
+#knock_bench()
+
+button_loop()
